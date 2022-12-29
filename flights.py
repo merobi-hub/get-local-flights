@@ -1,4 +1,3 @@
-from opensky_api import OpenSkyApi
 import time
 from datetime import datetime, timezone, timedelta
 import requests
