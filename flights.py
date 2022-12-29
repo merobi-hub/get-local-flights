@@ -2,7 +2,6 @@ from opensky_api import OpenSkyApi
 import time
 from datetime import datetime, timezone, timedelta
 import requests
-from requests.auth import HTTPBasicAuth
 import click 
 import rich_click
 
@@ -132,7 +131,9 @@ def get_flights(
     '--bbox',
     help=
     """
-    Boolean. Floats for lamin, lomin, lamax, lomax required if 'True.'
+    Boolean. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
+    'True.' See https://openskynetwork.github.io/opensky-api/rest.html for an 
+    example query with a bounding box.
     """,
     default=bool(False)
 )
