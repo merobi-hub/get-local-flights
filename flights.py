@@ -114,10 +114,18 @@ def get_flights(
     default=str('Barrington')
 )
 @click.option(
-    '--username'
+    '--username',
+    help=
+    """
+    OpenSky username
+    """
 )
 @click.option(
-    '--password'
+    '--password',
+    help=
+    """
+    OpenSky password
+    """
 )
 @click.option(
     '--limit',
