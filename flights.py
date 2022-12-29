@@ -6,34 +6,48 @@ from requests.auth import HTTPBasicAuth
 import click 
 import rich_click
 
-def get_flights(area: str, username: str, password: str):
-    ok = 1
+def get_flights(
+    area: str, 
+    username: str, 
+    password: str, 
+    limit: int, 
+    bbox: bool,
+    lamin: float,
+    lomin: float,
+    lamax: float,
+    lomax: float
+    ):
     previous = 0
     count = 0
-    while ok:
+    while count <= limit:
         if area == 'Barrington':
             r = requests.get(
-                f'https://opensky-network.org/api/states/all?lamin=41.708513&lomin=-71.363938&lamax=41.759753&lomax=-71.294243&extended=1',
+                'https://opensky-network.org/api/states/all?lamin=41.708513&lomin=-71.363938&lamax=41.759753&lomax=-71.294243&extended=1',
                 auth = (username, password)
             )
         if area == 'Nayatt':
             r = requests.get(
-                f'https://opensky-network.org/api/states/all?lamin=41.711757&lomin=-71.338692&lamax=41.728606&lomax=-71.291314&extended=1',
+                'https://opensky-network.org/api/states/all?lamin=41.711757&lomin=-71.338692&lamax=41.728606&lomax=-71.291314&extended=1',
                 auth = (username, password)
             )
         if area == 'NY':
             r = requests.get(
-                f'https://opensky-network.org/api/states/all?lamin=40.4961&lomin=-79.7621&lamax=45.0158&lomax=-71.8562&extended=1',
+                'https://opensky-network.org/api/states/all?lamin=40.4961&lomin=-79.7621&lamax=45.0158&lomax=-71.8562&extended=1',
                 auth = (username, password)
             )
         if area == 'RI':
             r = requests.get(
-                f'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
+                'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
                 auth = (username, password)
             )
         if area == '55 Adams':
             r = requests.get(
-                f'https://opensky-network.org/api/states/all?lamin=41.723676&lomin=-71.295256&lamax=41.724649&lomax=-71.294682&extended=1',
+                'https://opensky-network.org/api/states/all?lamin=41.723676&lomin=-71.295256&lamax=41.724649&lomax=-71.294682&extended=1',
+                auth = (username, password)
+            )
+        if bbox:
+            r = requests.get(
+                f'https://opensky-network.org/api/states/all?lamin={lamin}&lomin={lomin}&lamax={lamax}&lomax={lomax}&extended=1',
                 auth = (username, password)
             )
         r.raise_for_status()
@@ -106,13 +120,61 @@ def get_flights(area: str, username: str, password: str):
 @click.option(
     '--password'
 )
+@click.option(
+    '--limit',
+    help=
+    """
+    API request limit: integer up to 1000
+    """,
+    default=int(1000)
+)
+@click.option(
+    '--bbox',
+    help=
+    """
+    Boolean. Floats for lamin, lomin, lamax, lomax required if 'True.'
+    """,
+    default=bool(False)
+)
+@click.option(
+    '--lamin',
+    default=float(0.0)
+)
+@click.option(
+    '--lomin',
+    default=float(0.0)
+)
+@click.option(
+    '--lamax',
+    default=float(0.0)
+)
+@click.option(
+    '--lomax',
+    default=float(0.0)
+)
 
 def main(
     area: str,
     username: str,
-    password: str
+    password: str,
+    limit: int,
+    bbox : bool,
+    lamin: float,
+    lomin: float,
+    lamax: float,
+    lomax: float
 ):
-    get_flights(area=area, username=username, password=password)
+    get_flights(
+        area=area, 
+        username=username, 
+        password=password, 
+        limit=limit, 
+        bbox=bbox,
+        lamin=lamin,
+        lomin=lomin,
+        lamax=lamax,
+        lomax=lomax
+        )
 
 if __name__ == "__main__":
     main()
