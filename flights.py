@@ -145,20 +145,16 @@ def get_flights(
     default=bool(False)
 )
 @click.option(
-    '--lamin',
-    default=float(0.0)
+    '--lamin'
 )
 @click.option(
-    '--lomin',
-    default=float(0.0)
+    '--lomin'
 )
 @click.option(
-    '--lamax',
-    default=float(0.0)
+    '--lamax'
 )
 @click.option(
-    '--lomax',
-    default=float(0.0)
+    '--lomax'
 )
 
 def main(
@@ -166,7 +162,7 @@ def main(
     username: str,
     password: str,
     limit: int,
-    bbox : bool,
+    bbox: bool,
     lamin: float,
     lomin: float,
     lamax: float,
