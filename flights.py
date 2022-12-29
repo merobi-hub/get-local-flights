@@ -38,11 +38,6 @@ def get_flights(
                 'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
                 auth = (username, password)
             )
-        if area == '55 Adams':
-            r = requests.get(
-                'https://opensky-network.org/api/states/all?lamin=41.723676&lomin=-71.295256&lamax=41.724649&lomax=-71.294682&extended=1',
-                auth = (username, password)
-            )
         if bbox:
             r = requests.get(
                 f'https://opensky-network.org/api/states/all?lamin={lamin}&lomin={lomin}&lamax={lamax}&lomax={lomax}&extended=1',
@@ -108,7 +103,7 @@ def get_flights(
     '--area',
     help=
     """
-    Area options: 55 Adams, Barrington, Nayatt, RI, NY
+    Area options: Barrington, Nayatt, RI, NY
     """,
     default=str('Barrington')
 )
