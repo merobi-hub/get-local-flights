@@ -1,8 +1,7 @@
 import time
 from datetime import datetime, timezone, timedelta
 import requests
-import click 
-import rich_click
+import click
 
 def get_flights(
     area: str, 
@@ -14,7 +13,7 @@ def get_flights(
     lomin: float,
     lamax: float,
     lomax: float
-    ):
+):
     previous = 0
     count = 0
     while count <= limit:
@@ -73,7 +72,7 @@ def get_flights(
                 if i[-1] == 6:
                     print('Category: Heavy (> 300K lbs)')
                 if i[-1] == 8:
-                    print('Category: Helicopter')
+                    print('Category: Rotorcraft')
                 if i[-1] == 2:
                     print('Category: Light (< 15.5K lbs)')
                 if i[-1] == 5:
@@ -96,6 +95,7 @@ def get_flights(
                 now = datetime.now().strftime("%H:%M:%S")
                 print('No flights found in airspace since ', now)
                 time.sleep(5)
+            previous = 0
             count += 1
 
 @click.command()
@@ -173,7 +173,7 @@ def main(
         lomin=lomin,
         lamax=lamax,
         lomax=lomax
-        )
+    )
 
 if __name__ == "__main__":
     main()
