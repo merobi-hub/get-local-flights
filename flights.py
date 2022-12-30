@@ -138,7 +138,8 @@ def get_flights(
     """
     Boolean. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
     'True.' See https://openskynetwork.github.io/opensky-api/rest.html for an 
-    example query with a bounding box.
+    example query with a bounding box. Use tool such as http://bboxfinder.com/ 
+    to get bbox coordinates via a map-based GUI.
     """,
     default=bool(False)
 )
