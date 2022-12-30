@@ -4,6 +4,9 @@ import time
 from datetime import datetime, timezone, timedelta
 import requests
 import click
+from rich.console import Console
+
+console = Console(width=400, color_system="auto")
 
 def get_flights(
     area: str, 
@@ -173,8 +176,8 @@ def main(
 ):
     print(
       """
-              @@@@@@@@@@ @@@@     @@@@@ @@@@@@@@@ @@@@ @@@@ @@@@@@@@@ @@@@@@@@@@
-             @@@@@@@@@@ @@@@     @@@@@ @@@   @@@ @@@@ @@@@ @@@@@@@@@ @@@@@@@@@@
+              @@@@@@@@@@ @@@@     @@@@@ @@@@@@@@@ @@@@ @@@@ @@@@@@@@@ @@@@@@@@@@@@
+             @@@@@@@@@@ @@@@     @@@@@ @@@   @@@ @@@@ @@@@ @@@@@@@@@ @@@@@@@@@@@
             @@@@@      @@@@     @@@@@ @@@       @@@@@@@@@    @@@@   @@@@@
            @@@@@@@@@@ @@@@     @@@@@ @@@  @@@@ @@@@@@@@@    @@@@     @@@@@
         @@@@@@@      @@@@@@@@ @@@@@ @@@@   @@ @@@@ @@@@    @@@@  @@@@@@@@@@
@@ -185,17 +188,18 @@ def main(
       MIT License
       """
     )
-    get_flights(
-        area=area, 
-        username=username, 
-        password=password, 
-        limit=limit, 
-        bbox=bbox,
-        lamin=lamin,
-        lomin=lomin,
-        lamax=lamax,
-        lomax=lomax
-    )
+    with console.status('working...', spinner='aesthetic'):
+        get_flights(
+            area=area, 
+            username=username, 
+            password=password, 
+            limit=limit, 
+            bbox=bbox,
+            lamin=lamin,
+            lomin=lomin,
+            lamax=lamax,
+            lomax=lomax
+        )
 
 if __name__ == "__main__":
     main()
