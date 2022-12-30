@@ -52,10 +52,14 @@ def get_flights(
                 e = datetime.now(timezone.utc)
                 begin = int(time.mktime(b.timetuple()))
                 end = int(time.mktime(e.timetuple()))
-                r = requests.get(
-                    f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
-                    auth = (username, password)
-                )
+                try:
+                    r = requests.get(
+                        f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
+                        auth = (username, password)
+                    )
+                except:
+                    print('An error occurred accessing the API. Skipping this flight.')
+                    continue
                 r.raise_for_status()
                 data = r.json()
                 print('=====================')
@@ -138,7 +142,7 @@ def get_flights(
     """
     Boolean. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
     'True.' See https://openskynetwork.github.io/opensky-api/rest.html for an 
-    example query with a bounding box. Use tool such as http://bboxfinder.com/ 
+    example query with a bounding box. Use a tool such as http://bboxfinder.com/ 
     to get bbox coordinates via a map-based GUI.
     """,
     default=bool(False)
