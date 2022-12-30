@@ -60,6 +60,7 @@ def get_flights(
                 data = r.json()
                 print('=====================')
                 print('Callsign: ', data[0]['callsign'])
+                print('True track: ', i[10], ' degrees')
                 print('Barometric altitude: ', i[7], ' m')
                 print('Geometric altitude: ', i[13], ' m')
                 print('Ground velocity: ', i[9], ' m/s')
