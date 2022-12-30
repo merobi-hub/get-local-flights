@@ -30,5 +30,5 @@ Python 3.10.7
 
 ### License
 
-Creative Commons BY-SA 4.0
+MIT License
 
