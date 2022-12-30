@@ -1,4 +1,6 @@
-# Get Local Flights
+# Flights
+
+KFOs in your bounding box from the OpenSky API
 
 ### Description
 
