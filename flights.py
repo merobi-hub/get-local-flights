@@ -14,12 +14,11 @@ def get_flights(
     username: str, 
     password: str, 
     limit: int, 
-    bbox: bool,
+    bbox: str,
     lamin: float,
     lomin: float,
     lamax: float,
     lomax: float,
-    country: bool,
     iso: str
 ):
     previous = 0
@@ -46,12 +45,12 @@ def get_flights(
                     'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
                     auth = (username, password)
                 )
-            if bbox:
+            if bbox == 'y':
                 r = requests.get(
                     f'https://opensky-network.org/api/states/all?lamin={lamin}&lomin={lomin}&lamax={lamax}&lomax={lomax}&extended=1',
                     auth = (username, password)
                 )
-            if country:
+            if iso:
                 if iso == 'USA':
                     bbox = [c.bbox for c in country_subunits_by_iso_code(iso)]
                     r = requests.get(
@@ -161,12 +160,11 @@ def get_flights(
     '--bbox',
     help=
     """
-    Boolean. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
-    'True'. See https://openskynetwork.github.io/opensky-api/rest.html for an 
+    'y' or 'n'. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
+    'y'. See https://openskynetwork.github.io/opensky-api/rest.html for an 
     example query with a bounding box. Use a tool such as http://bboxfinder.com/ 
     to get bbox coordinates via a map-based GUI.
-    """,
-    default=bool(False)
+    """
 )
 @click.option(
     '--lamin'
@@ -181,17 +179,11 @@ def get_flights(
     '--lomax'
 )
 @click.option(
-    '--country',
+    '--iso',
     help=
     """
-    Boolean. ISO code string required if 'True' and country other than USA desired.
     For a list of ISO codes, see: https://www.nationsonline.org/oneworld/country_code_list.htm.
-    """,
-    default=bool(False)
-)
-@click.option(
-    '--iso',
-    default=str('USA')
+    """
 )
 
 def main(
@@ -199,12 +191,11 @@ def main(
     username: str,
     password: str,
     limit: int,
-    bbox: bool,
+    bbox: str,
     lamin: float,
     lomin: float,
     lamax: float,
     lomax: float,
-    country: bool,
     iso: str
 ):
     print(
@@ -232,7 +223,6 @@ def main(
             lomin=lomin,
             lamax=lamax,
             lomax=lomax,
-            country=country,
             iso=iso
         )
 
