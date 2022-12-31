@@ -209,7 +209,7 @@ def main(
         @@@@@@@      @@@@@@@@ @@@@@ @@@@   @@ @@@@ @@@@    @@@@  @@@@@@@@@@
       @@@@@@@@      @@@@@@@@ @@@@@ @@@@@@@@@ @@@@ @@@@    @@@@  @@@@@@@@@@
         
-      KFOs in your bounding box from the OpenSky API
+      IFOs in your bounding box from the OpenSky API
       By Michael Robinson
       MIT License
       """
