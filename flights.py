@@ -5,6 +5,7 @@ from datetime import datetime, timezone, timedelta
 import requests
 import click
 from rich.console import Console
+from country_bounding_boxes import country_subunits_by_iso_code
 
 console = Console(width=400, color_system="auto")
 
@@ -17,7 +18,9 @@ def get_flights(
     lamin: float,
     lomin: float,
     lamax: float,
-    lomax: float
+    lomax: float,
+    country: bool,
+    iso: str
 ):
     previous = 0
     count = 0
@@ -47,6 +50,19 @@ def get_flights(
                 f'https://opensky-network.org/api/states/all?lamin={lamin}&lomin={lomin}&lamax={lamax}&lomax={lomax}&extended=1',
                 auth = (username, password)
             )
+        if country:
+            if iso == 'USA':
+                bbox = [c.bbox for c in country_subunits_by_iso_code(iso)]
+                r = requests.get(
+                    f'https://opensky-network.org/api/states/all?lamin={bbox[3][1]}&lomin={bbox[3][0]}&lamax={bbox[3][3]}&lomax={bbox[3][2]}&extended=1',
+                    auth = (username, password)
+                )
+            else:
+                bbox = [c.bbox for c in country_subunits_by_iso_code(iso)]
+                r = requests.get(
+                    f'https://opensky-network.org/api/states/all?lamin={bbox[0][1]}&lomin={bbox[0][0]}&lamax={bbox[0][3]}&lomax={bbox[0][2]}&extended=1',
+                    auth = (username, password)
+                )
         r.raise_for_status()
         data = r.json()
         if data['states']:
@@ -55,14 +71,10 @@ def get_flights(
                 e = datetime.now(timezone.utc)
                 begin = int(time.mktime(b.timetuple()))
                 end = int(time.mktime(e.timetuple()))
-                try:
-                    r = requests.get(
-                        f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
-                        auth = (username, password)
-                    )
-                except:
-                    print('An error occurred accessing the API. Skipping this flight.')
-                    continue
+                r = requests.get(
+                    f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
+                    auth = (username, password)
+                )
                 r.raise_for_status()
                 data = r.json()
                 print('=====================')
@@ -144,7 +156,7 @@ def get_flights(
     help=
     """
     Boolean. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
-    'True.' See https://openskynetwork.github.io/opensky-api/rest.html for an 
+    'True'. See https://openskynetwork.github.io/opensky-api/rest.html for an 
     example query with a bounding box. Use a tool such as http://bboxfinder.com/ 
     to get bbox coordinates via a map-based GUI.
     """,
@@ -162,6 +174,18 @@ def get_flights(
 @click.option(
     '--lomax'
 )
+@click.option(
+    '--country',
+    help=
+    """
+    Boolean. ISO code string required if 'True' and country other than USA desired.
+    """,
+    default=bool(False)
+)
+@click.option(
+    '--iso',
+    default=str('USA')
+)
 
 def main(
     area: str,
@@ -172,7 +196,9 @@ def main(
     lamin: float,
     lomin: float,
     lamax: float,
-    lomax: float
+    lomax: float,
+    country: bool,
+    iso: str
 ):
     print(
       """
@@ -198,7 +224,9 @@ def main(
             lamin=lamin,
             lomin=lomin,
             lamax=lamax,
-            lomax=lomax
+            lomax=lomax,
+            country=country,
+            iso=iso
         )
 
 if __name__ == "__main__":
