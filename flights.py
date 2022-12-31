@@ -72,11 +72,14 @@ def get_flights(
                     e = datetime.now(timezone.utc)
                     begin = int(time.mktime(b.timetuple()))
                     end = int(time.mktime(e.timetuple()))
-                    r = requests.get(
-                        f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
-                        auth = (username, password)
-                    )
-                    r.raise_for_status()
+                    try:
+                        r = requests.get(
+                            f'https://opensky-network.org/api/flights/aircraft?icao24={i[0]}&begin={begin}&end={end}', 
+                            auth = (username, password)
+                        )
+                        r.raise_for_status()
+                    except requests.exceptions.HTTPError:
+                        continue
                     data = r.json()
                     print('=====================')
                     print('Callsign: ', data[0]['callsign'])
