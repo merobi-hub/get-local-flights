@@ -14,7 +14,7 @@ def get_flights(
     username: str, 
     password: str, 
     limit: int, 
-    bbox: str,
+    b: bool,
     lamin: float,
     lomin: float,
     lamax: float,
@@ -45,7 +45,7 @@ def get_flights(
                     'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
                     auth = (username, password)
                 )
-            if bbox == 'y':
+            if b:
                 r = requests.get(
                     f'https://opensky-network.org/api/states/all?lamin={lamin}&lomin={lomin}&lamax={lamax}&lomax={lomax}&extended=1',
                     auth = (username, password)
@@ -139,14 +139,16 @@ def get_flights(
     help=
     """
     OpenSky username
-    """
+    """,
+    required=True
 )
 @click.option(
     '--password',
     help=
     """
     OpenSky password
-    """
+    """,
+    required=True
 )
 @click.option(
     '--limit',
@@ -157,14 +159,16 @@ def get_flights(
     default=int(1000)
 )
 @click.option(
-    '--bbox',
+    '-b',
+    is_flag=True,
     help=
     """
-    'y' or 'n'. Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
-    'y'. See https://openskynetwork.github.io/opensky-api/rest.html for an 
-    example query with a bounding box. Use a tool such as http://bboxfinder.com/ 
-    to get bbox coordinates via a map-based GUI.
-    """
+    Floats for '--lamin', '--lomin', '--lamax', '--lomax' required if 
+    this flag used. See https://openskynetwork.github.io/opensky-api/rest.html 
+    for an example query with a bounding box. Use a tool such as 
+    http://bboxfinder.com/ to get bbox coordinates via a map-based GUI.
+    """,
+    default=bool(True)
 )
 @click.option(
     '--lamin'
@@ -191,7 +195,7 @@ def main(
     username: str,
     password: str,
     limit: int,
-    bbox: str,
+    b: bool,
     lamin: float,
     lomin: float,
     lamax: float,
@@ -218,7 +222,7 @@ def main(
             username=username, 
             password=password, 
             limit=limit, 
-            bbox=bbox,
+            b=b,
             lamin=lamin,
             lomin=lomin,
             lamax=lamax,

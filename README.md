@@ -18,7 +18,7 @@ Barrington, RI.
 Using a custom bounding box:
 
 ```
-$ python3 flights.py --bbox y --lamin 41.146 --lomin -71.862 --lamax 42.018 --lomax -71.120 --username username --password password
+$ python3 flights.py -b --lamin 41.146 --lomin -71.862 --lamax 42.018 --lomax -71.120 --username username --password password
 ```
 
 Using the default preconfigured area option:
