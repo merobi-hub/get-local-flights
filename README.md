@@ -13,7 +13,8 @@ Execute `flights.py` with an OpenSky username and password, passing in either on
 of the preconfigured area options ('Barrington', 'Nayatt', 'RI', 'NY'), setting 
 a custom bounding box using the `--lamin`, `--lomin`, `--lamax`, and `--lomax` 
 arguments, or passing in an ISO country code (e.g., 'ES'). The default area is 
-Barrington, RI.
+Barrington, RI. To return an array of all flight data collected, use the `-a` 
+flag. To turn on terminal output, set the `-t` flag.
 
 Using a custom bounding box:
 
@@ -37,6 +38,12 @@ Using an ISO country code:
 
 ```
 python3 flights.py --iso ES --username username --password password
+```
+
+Turning on terminal output, requesting an array, and limiting requests to 2:
+
+```
+$ python3 flights.py --limit 2 -a -t --area RI --username username --password password
 ```
 
 ### Prerequisites
