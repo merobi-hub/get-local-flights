@@ -19,11 +19,11 @@ class Flights:
         limit: int, 
         b: bool,
         t: bool,
-        a: bool,
-        lamin: float,
-        lomin: float,
-        lamax: float,
-        lomax: float,
+        array: bool,
+        lamin: str,
+        lomin: str,
+        lamax: str,
+        lomax: str,
         iso: str
         ): 
         self.area = area 
@@ -32,7 +32,7 @@ class Flights:
         self.limit = limit 
         self.b = b
         self.t = t 
-        self.a = a
+        self.array = array
         self.lamin = lamin
         self.lomin = lomin
         self.lamax = lamax
@@ -47,46 +47,44 @@ class Flights:
         count = 0
         try:
             while count < self.limit:
-                if self.area: 
-                    if self.area == 'Barrington':
-                        r = requests.get(
-                            'https://opensky-network.org/api/states/all?lamin=41.708513&lomin=-71.363938&lamax=41.759753&lomax=-71.294243&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                    elif self.area == 'Nayatt':
-                        r = requests.get(
-                            'https://opensky-network.org/api/states/all?lamin=41.711757&lomin=-71.338692&lamax=41.728606&lomax=-71.291314&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                    elif self.area == 'NY':
-                        r = requests.get(
-                            'https://opensky-network.org/api/states/all?lamin=40.4961&lomin=-79.7621&lamax=45.0158&lomax=-71.8562&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                    elif self.area == 'RI':
-                        r = requests.get(
-                            'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                elif self.b:
+                if self.area == 'Barrington':
                     r = requests.get(
-                        f'https://opensky-network.org/api/states/all?lamin={self.lamin}&lomin={self.lomin}&lamax={self.lamax}&lomax={self.lomax}&extended=1',
+                        'https://opensky-network.org/api/states/all?lamin=41.708513&lomin=-71.363938&lamax=41.759753&lomax=-71.294243&extended=1',
                         auth = (self.username, self.password)
                     )
-                elif self.iso:
-                    if self.iso == 'USA':
-                        bbox = [c.bbox for c in country_subunits_by_iso_code(self.iso)]
-                        r = requests.get(
-                            f'https://opensky-network.org/api/states/all?lamin={bbox[3][1]}&lomin={bbox[3][0]}&lamax={bbox[3][3]}&lomax={bbox[3][2]}&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                    else:
-                        bbox = [c.bbox for c in country_subunits_by_iso_code(self.iso)]
-                        r = requests.get(
-                            f'https://opensky-network.org/api/states/all?lamin={bbox[0][1]}&lomin={bbox[0][0]}&lamax={bbox[0][3]}&lomax={bbox[0][2]}&extended=1',
-                            auth = (self.username, self.password)
-                        )
-                r.raise_for_status()
+                elif self.area == 'Nayatt':
+                    r = requests.get(
+                        'https://opensky-network.org/api/states/all?lamin=41.711757&lomin=-71.338692&lamax=41.728606&lomax=-71.291314&extended=1',
+                        auth = (self.username, self.password)
+                    )
+                elif self.area == 'NY':
+                    r = requests.get(
+                        'https://opensky-network.org/api/states/all?lamin=40.4961&lomin=-79.7621&lamax=45.0158&lomax=-71.8562&extended=1',
+                        auth = (self.username, self.password)
+                    )
+                elif self.area == 'RI':
+                    r = requests.get(
+                        'https://opensky-network.org/api/states/all?lamin=41.146&lomin=-71.862&lamax=42.018&lomax=-71.120&extended=1',
+                        auth = (self.username, self.password)
+                    )
+                elif self.b:
+                    url = f'https://opensky-network.org/api/states/all?lamin={self.lamin}&lomin={self.lomin}&lamax={self.lamax}&lomax={self.lomax}&extended=1'
+                    r = requests.get(
+                        url,
+                        auth = (self.username, self.password)   
+                    )
+                elif self.iso == 'USA':
+                    bbox = [c.bbox for c in country_subunits_by_iso_code(self.iso)]
+                    r = requests.get(
+                        f'https://opensky-network.org/api/states/all?lamin={bbox[3][1]}&lomin={bbox[3][0]}&lamax={bbox[3][3]}&lomax={bbox[3][2]}&extended=1',
+                        auth = (self.username, self.password)
+                    )
+                elif self.iso != 'USA':
+                    bbox = [c.bbox for c in country_subunits_by_iso_code(self.iso)]
+                    r = requests.get(
+                        f'https://opensky-network.org/api/states/all?lamin={bbox[0][1]}&lomin={bbox[0][0]}&lamax={bbox[0][3]}&lomax={bbox[0][2]}&extended=1',
+                        auth = (self.username, self.password)
+                    )
                 self.bbox_data = r.json()
                 if self.bbox_data['states']:
                     for i in self.bbox_data['states']:
@@ -105,7 +103,7 @@ class Flights:
                         self.aircraft_data = r.json()
                         if self.t:
                             self.to_terminal()
-                        if self.a:
+                        if self.array:
                             self.to_array()
                     previous = 1
                     count += 1
@@ -126,8 +124,8 @@ class Flights:
                     previous = 0
                     count += 1
         except KeyboardInterrupt:
-            if self.a:
-                self.to_array()
+            if self.array:
+                self.return_array()
             exit()
 
     def to_terminal(self):
@@ -231,8 +229,7 @@ class Flights:
     https://openskynetwork.github.io/opensky-api/rest.html for an example query 
     with a bounding box. Use a tool such as http://bboxfinder.com/ to get bbox 
     coordinates via a map-based GUI.
-    """,
-    default=bool(True)
+    """
 )
 @click.option(
     '-t',
@@ -244,13 +241,13 @@ class Flights:
     default=bool(False)
 )
 @click.option(
-    '-a',
+    '-array',
     is_flag=True,
     help=
     """
-    Returns an array of all flights if set.
+    If set to False, an array of all flights will not be returned.
     """,
-    default=bool(False)
+    default=bool(True)
 )
 @click.option(
     '--lamin'
@@ -279,11 +276,11 @@ def main(
     limit: int,
     b: bool,
     t: bool,
-    a: bool,
-    lamin: float,
-    lomin: float,
-    lamax: float,
-    lomax: float,
+    array: bool,
+    lamin: str,
+    lomin: str,
+    lamax: str,
+    lomax: str,
     iso: str
     ):
     print(
@@ -307,7 +304,7 @@ Copyright 2022-2023 Michael Robinson | MIT License
             limit=limit, 
             b=b,
             t=t,
-            a=a,
+            array=array,
             lamin=lamin,
             lomin=lomin,
             lamax=lamax,
@@ -315,7 +312,7 @@ Copyright 2022-2023 Michael Robinson | MIT License
             iso=iso
             )
         f.get_flights()
-        if a:
+        if array:
             f.return_array()
 
 if __name__ == "__main__":
