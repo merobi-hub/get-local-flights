@@ -241,11 +241,11 @@ class Flights:
     default=bool(False)
 )
 @click.option(
-    '-array',
+    '--array/--no-array',
     is_flag=True,
     help=
     """
-    If set to False, an array of all flights will not be returned.
+    If False, an array of all flights will not be returned.
     """,
     default=bool(True)
 )

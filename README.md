@@ -40,10 +40,10 @@ Using an ISO country code:
 python3 flights.py --iso ES --username username --password password
 ```
 
-Turning on terminal output, requesting an array, and limiting requests to 2:
+Turning on terminal output, not requesting an array, and limiting requests to 2:
 
 ```
-$ python3 flights.py --limit 2 -a -t --area RI --username username --password password
+$ python3 flights.py --limit 2 --no-array -t --area RI --username username --password password
 ```
 
 ### Prerequisites
