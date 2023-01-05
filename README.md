@@ -12,9 +12,9 @@ A script for streaming IFOs in a country's airspace or other defined area from t
 Execute `flights.py` with an OpenSky username and password, passing in either one
 of the preconfigured area options ('Barrington', 'Nayatt', 'RI', 'NY'), setting 
 a custom bounding box using the `--lamin`, `--lomin`, `--lamax`, and `--lomax` 
-arguments, or passing in an ISO country code (e.g., 'ES'). The default area is 
-Barrington, RI. To return an array of all flight data collected, use the `-a` 
-flag. To turn on terminal output, set the `-t` flag.
+arguments, or passing in an ISO country code (e.g., 'ES'). To turn on terminal 
+output, set the `-t` flag. By default, the script returns an array of the collected 
+flights.
 
 Using a custom bounding box:
 
@@ -22,13 +22,7 @@ Using a custom bounding box:
 $ python3 flights.py -b --lamin 41.146 --lomin -71.862 --lamax 42.018 --lomax -71.120 --username username --password password
 ```
 
-Using the default preconfigured area option:
-
-```
-$ python3 flights.py --username username --password password
-```
-
-Using one of the other preconfigured area options:
+Using one of the preconfigured area options:
 
 ```
 $ python3 flights.py --area RI --username username --password password
